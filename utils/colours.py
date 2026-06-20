@@ -1,24 +1,21 @@
-# utils/colours.py
 # Central palette — edit here to restyle the entire dashboard.
 
-# Category colours (colour-blind safe)
-CYBER     = "#0072B2"   
-NON_CYBER = "#D55E00" 
+# Category colours: Wong (2011) colour-blind safe pair
+CYBER     = "#0072B2"
+NON_CYBER = "#D55E00"
 
-# Neutral tones
-GREY      = "#767676"  
-GREY_DARK = "#707070" 
+GREY      = "#767676"
+GREY_DARK = "#707070"
 
-# Convenience aliases used inside chart functions
 ACCENT       = CYBER
 WORST_COLOUR = CYBER
 BEST_COLOUR  = NON_CYBER
 
-# GDPR compliance semantic aliases (reuse the accessible pair, different meaning)
-COMPLIANT     = NON_CYBER  # blue  — reported within 72 h
-NON_COMPLIANT = CYBER      # orange — reported late
+# Semantic aliases for GDPR compliance charts (same accessible pair, different meaning)
+COMPLIANT     = NON_CYBER  # reported within 72 h
+NON_COMPLIANT = CYBER      # reported late
 
-# Category → colour mapping (passed directly to Plotly color_discrete_map)
+# Passed directly to Plotly color_discrete_map
 CATEGORY_COLOUR_MAP = {
     "Cyber":     CYBER,
     "Non Cyber": NON_CYBER,

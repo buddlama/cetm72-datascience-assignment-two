@@ -1,4 +1,3 @@
-# utils/data.py
 # Shared data loading and filtering logic, imported by every page.
 
 import streamlit as st
@@ -53,14 +52,12 @@ def load_data(filepath):
     str_cols = df.select_dtypes(include=["string", "object"]).columns
     df[str_cols] = df[str_cols].apply(lambda col: col.str.strip())
 
-    # GDPR compliance flag — True if reported within 72 hours
     compliant_bands = ["Less than 24 hours", "24 hours to 72 hours"]
     df["gdpr_compliant"] = df["time_to_report"].isin(compliant_bands)
 
-    # df_rows: full dataset — for Data Type / Data Subject Type analysis (not used in filters yet)
+    # df_rows retains one row per data-type exposure (for data-type analysis);
+    # df_incidents deduplicates to one row per incident so charts aren't double-counted.
     df_rows = df.copy()
-
-    # df_incidents: one row per incident — used by all charts and all filters
     df_incidents = df.drop_duplicates(subset=["bi_ref"]).reset_index(drop=True)
 
     return df_incidents, df_rows
@@ -92,7 +89,6 @@ def apply_filters(df_incidents, sectors=None, incident_types=None, categories=No
 
 DATA_PATH = "ico-dataset.csv"
 
-# Canonical band order for subjects_affected — this column is ordinal but
-# does not sort correctly alphabetically or by appearance order (see D-15).
-# Any chart using this column must apply this explicit order.
+# subjects_affected is ordinal but doesn't sort correctly alphabetically,
+# so every chart that uses it must apply this explicit order.
 SUBJECTS_AFFECTED_ORDER = ["1 to 9", "10 to 99", "100 to 1k", "1k to 10k", "10k to 100k"]

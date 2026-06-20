@@ -1,5 +1,3 @@
-# pages/2_Incident_Types.py
-
 import streamlit as st
 import sys
 import os
@@ -17,10 +15,6 @@ df_incidents, df_rows = load_data(DATA_PATH)
 
 st.title("Incident Types")
 st.caption("How did Q1 2024 breaches happen — human error or cyber-attack?")
-
-# ─────────────────────────────────────────────────────────────────────────
-# Page-scoped filters (sidebar) — only the fields relevant to this question
-# ─────────────────────────────────────────────────────────────────────────
 
 st.sidebar.header("Filters")
 
@@ -41,17 +35,9 @@ filtered_df = apply_filters(
     report_times=selected_report_times,
 )
 
-# ─────────────────────────────────────────────────────────────────────────
-# Summary metrics
-# ─────────────────────────────────────────────────────────────────────────
-
 render_summary_metrics(filtered_df, df_incidents)
 
 st.divider()
-
-# ─────────────────────────────────────────────────────────────────────────
-# Chart-type toggle
-# ─────────────────────────────────────────────────────────────────────────
 
 if len(filtered_df) == 0:
     st.warning("No incidents match the current filter selection.")

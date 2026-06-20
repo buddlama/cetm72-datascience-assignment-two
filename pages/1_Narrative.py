@@ -1,5 +1,3 @@
-# pages/1_Narrative.py
-
 import streamlit as st
 import sys
 import os
@@ -10,10 +8,6 @@ from utils.data import load_data, DATA_PATH
 st.set_page_config(page_title="Narrative — Q1 2024", layout="wide")
 
 df_incidents, df_rows = load_data(DATA_PATH)
-
-# ─────────────────────────────────────────────────────────────────────────
-# Compute the stats that get woven into the narrative text
-# ─────────────────────────────────────────────────────────────────────────
 
 total = len(df_incidents)
 non_cyber = (df_incidents["category"] == "Non Cyber").sum()
@@ -31,17 +25,12 @@ top_sector_pct = (top_sector_count / total) * 100
 compliant_pct = df_incidents["gdpr_compliant"].mean() * 100
 non_compliant_pct = 100 - compliant_pct
 
-# Worst-compliance sector
 sector_compliance = (
     df_incidents.groupby("sector")["gdpr_compliant"].mean() * 100
 ).sort_values()
 worst_sector = sector_compliance.index[0]
 worst_sector_pct = sector_compliance.iloc[0]
 
-
-# ─────────────────────────────────────────────────────────────────────────
-# Page content
-# ─────────────────────────────────────────────────────────────────────────
 
 st.title("Narrative")
 st.caption("Description of key Q1 2024 trends")

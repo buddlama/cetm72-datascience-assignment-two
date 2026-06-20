@@ -1,4 +1,3 @@
-# utils/charts.py
 # Chart-building functions, imported by individual pages.
 
 import pandas as pd
@@ -130,14 +129,6 @@ def plot_incident_type_breakdown(df_incidents, highlight_top_n=1):
     return fig
 
 def plot_incident_type_by_category(df_incidents):
-    """
-    Colours every bar by Cyber/Non-Cyber category (same palette as the
-    Sectoral Vulnerability chart: orange = Cyber, blue = Non Cyber), so the
-    human-error-vs-attack split is visible across the full ranked list, not
-    just inferred from the single top bar. The single largest incident type
-    keeps a bold outline so the "one dominant cause" finding isn't lost
-    alongside the new category split.
-    """
     if len(df_incidents) == 0:
         fig = go.Figure()
         fig.update_layout(title="No incidents match the current filters", height=600)
@@ -153,8 +144,7 @@ def plot_incident_type_by_category(df_incidents):
 
     colours = counts["category"].map(CATEGORY_COLOUR_MAP)
 
-    # Outline only the single largest bar (last row, since ascending) so the
-    # "one dominant incident type" finding from the original chart is retained
+    # Outline the largest bar so the "one dominant type" finding isn't lost
     n = len(counts)
     line_widths = [0] * n
     line_widths[-1] = 3
@@ -181,8 +171,7 @@ def plot_incident_type_by_category(df_incidents):
     non_cyber_total = counts.loc[counts["category"] == "Non Cyber", "count"].sum()
     non_cyber_pct = (non_cyber_total / total) * 100 if total > 0 else 0
 
-    # Manual legend via dummy traces, since a single bar trace can't show
-    # a category legend on its own
+    # Single bar trace can't generate a category legend — add dummy traces
     for cat, colour in CATEGORY_COLOUR_MAP.items():
         fig.add_trace(go.Bar(
             x=[None], y=[None],
@@ -217,12 +206,8 @@ def plot_incident_type_by_category(df_incidents):
 
 def plot_breach_scale_by_category(df_incidents):
     """
-    Line chart comparing the distribution of breach scale (subjects affected)
-    between Cyber and Non-Cyber incidents, expressed as % within each category.
-    Raw counts can't be compared directly because Non-Cyber incidents outnumber
-    Cyber ~2.7:1; normalising to proportions reveals the shape difference —
-    Non-Cyber peaks sharply at the smallest band (human errors are typically
-    contained), while Cyber has a flatter profile skewed toward larger bands.
+    Shows % within each category (not raw counts) because Non-Cyber outnumbers
+    Cyber ~2.7:1 — proportions reveal the shape difference between the two profiles.
     """
     if len(df_incidents) == 0:
         fig = go.Figure()
@@ -355,7 +340,6 @@ def plot_sectoral_vulnerability(df_incidents):
 
 
 def plot_sectoral_table(df_incidents):
-    """Alternative view: cross-tab table instead of chart."""
     counts = sector_category_counts(df_incidents)
     pivot = counts.pivot(index="sector", columns="category", values="count").fillna(0).astype(int)
     pivot["Total"] = pivot.sum(axis=1)
@@ -363,7 +347,6 @@ def plot_sectoral_table(df_incidents):
     return pivot
 
 
-# Conservative lower bound per subjects-affected band (used for estimated-impact charts)
 BAND_LOWER_BOUNDS = {
     "1 to 9":         1,
     "10 to 99":       10,
@@ -385,12 +368,6 @@ def subjects_affected_by_sector(df_incidents, band_order):
 
 
 def plot_subjects_affected_by_sector(df_incidents, band_order):
-    """
-    Shows breach SCALE by sector (how many people affected), as distinct
-    from breach VOLUME by sector (incident count, shown on the main
-    Sectoral Vulnerability chart). A sector with few incidents but large
-    breaches tells a different story than a sector with many small ones.
-    """
     if len(df_incidents) == 0:
         fig = go.Figure()
         fig.update_layout(title="No incidents match the current filters", height=700)
@@ -512,12 +489,6 @@ def gdpr_compliance_by_category(df_incidents):
 
 
 def plot_gdpr_compliance_by_category(df_incidents):
-    """
-    Compares GDPR 72-hour compliance rate between Cyber and Non-Cyber
-    incidents. Tests whether human-error (non-cyber) incidents, already
-    shown to dominate by volume, are also worse at timely reporting —
-    compounding the central Assignment 1 narrative.
-    """
     if len(df_incidents) == 0:
         fig = go.Figure()
         fig.update_layout(title="No incidents match the current filters", height=400)
@@ -582,16 +553,9 @@ def gdpr_compliance_by_decision(df_incidents):
 
 def plot_gdpr_compliance_by_decision(df_incidents):
     """
-    Tests whether the ICO's regulatory response correlates with whether the
-    incident was reported on time — i.e. are late-reported breaches more
-    likely to trigger formal action (Action Taken / Investigation Pursued)?
-
-    Rendered as a dot plot rather than a bar chart (see D-25): the finding
-    here is that compliance is similar across all four decision types
-    (~7-point spread). A dot plot communicates "these are all close
-    together" more honestly than a bar chart, where small differences
-    between adjacent full-length bars can visually read as more dramatic
-    than they are.
+    Dot plot (not bar chart) because all four decision types sit within a
+    ~7-point range — dots communicate "these are similar" more honestly
+    than bars anchored at zero.
     """
     if len(df_incidents) == 0:
         fig = go.Figure()
@@ -660,7 +624,7 @@ def gdpr_compliance_by_subjects_affected(df_incidents, band_order):
         .reset_index()
     )
     summary["compliance_pct"] = (summary["compliant"] / summary["total"]) * 100
-    # Apply canonical band order (D-15) rather than relying on groupby's default sort
+    # subjects_affected doesn't sort correctly by default — apply explicit order
     summary["subjects_affected"] = pd.Categorical(
         summary["subjects_affected"], categories=band_order, ordered=True
     )
@@ -669,13 +633,6 @@ def gdpr_compliance_by_subjects_affected(df_incidents, band_order):
 
 
 def plot_gdpr_compliance_by_subjects_affected(df_incidents, band_order):
-    """
-    Tests whether breach scale (people affected) relates to GDPR reporting
-    compliance. NOTE: on initial exploration this relationship was found to
-    be non-monotonic (no smooth "bigger breach = later report" gradient),
-    and the largest band typically has the smallest sample size — both are
-    surfaced directly in the chart rather than smoothed over.
-    """
     if len(df_incidents) == 0:
         fig = go.Figure()
         fig.update_layout(title="No incidents match the current filters", height=400)
@@ -683,7 +640,6 @@ def plot_gdpr_compliance_by_subjects_affected(df_incidents, band_order):
 
     summary = gdpr_compliance_by_subjects_affected(df_incidents, band_order)
 
-    # Highlight whichever band has the lowest compliance, wherever it falls
     colours = [GREY] * len(summary)
     worst_idx = summary["compliance_pct"].idxmin()
     colours[worst_idx] = ACCENT
@@ -735,7 +691,6 @@ def plot_gdpr_compliance_by_subjects_affected(df_incidents, band_order):
 
 
 def plot_gdpr_compliance_dotplot(df_incidents):
-    """Alternative view: dot plot with worst/best highlighted."""
     if len(df_incidents) == 0:
         fig = go.Figure()
         fig.update_layout(title="No incidents match the current filters", height=700)
@@ -807,15 +762,8 @@ def plot_gdpr_compliance_dotplot(df_incidents):
 
 def plot_sector_impact_bubble(df_incidents):
     """
-    Bubble chart: X = incident count, Y = estimated people affected (lower-bound
-    sum of each band), bubble size ∝ estimated impact, colour = category.
-
-    Each point is one sector × category pair, so a sector appears as two bubbles
-    (Cyber and Non-Cyber) revealing whether its impact is driven by frequency or
-    by scale — a distinction the original incident-count bar chart cannot make.
-
-    'Estimated' is stated explicitly: the true figure could be substantially
-    higher since we use each band's lower bound (e.g. "10k to 100k" → 10,000).
+    Each bubble is one sector × category pair; size ∝ estimated people affected
+    (lower-bound sum per band). Reveals sectors whose impact outweighs their volume rank.
     """
     if len(df_incidents) == 0:
         fig = go.Figure()
@@ -905,10 +853,8 @@ def plot_sector_impact_bubble(df_incidents):
 
 def plot_gdpr_dumbbell_by_decision(df_incidents):
     """
-    Dumbbell chart: two dots per regulatory decision (compliant count, non-compliant
-    count) joined by a line. The segment length is the absolute gap, which the rate
-    view conceals — 'Informal Action Taken' at 62% on 2,289 incidents is a very
-    different story from 'Investigation Pursued' at 55% on 130 incidents.
+    Shows absolute counts (not rates) per decision type — line length is the raw gap,
+    which the rate view conceals when sample sizes differ dramatically.
     """
     if len(df_incidents) == 0:
         fig = go.Figure()

@@ -1,6 +1,3 @@
-# app.py
-# Home page — entry point. Run with: streamlit run app.py
-
 import streamlit as st
 
 st.set_page_config(
@@ -8,10 +5,6 @@ st.set_page_config(
     page_icon="🔒",
     layout="wide",
 )
-
-# ─────────────────────────────────────────────────────────────────────────
-# Hero section
-# ─────────────────────────────────────────────────────────────────────────
 
 st.title("UK Data Security Incidents Dashboard")
 st.subheader("Q1 2024 — ICO Data Security Incident Trends")
@@ -29,10 +22,6 @@ st.markdown(
 )
 
 st.divider()
-
-# ─────────────────────────────────────────────────────────────────────────
-# Content map
-# ─────────────────────────────────────────────────────────────────────────
 
 st.markdown("### Contents")
 
