@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 from utils.colours import (
     ACCENT, GREY, GREY_DARK,
     WORST_COLOUR, BEST_COLOUR,
+    COMPLIANT, NON_COMPLIANT,
     CATEGORY_COLOUR_MAP, BAND_COLOURS, BAND_ORDER,
 )
 
@@ -205,7 +206,7 @@ def plot_incident_type_by_category(df_incidents):
         legend_title_text="",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         margin=dict(l=10, r=40, t=110, b=40),
-        height=50,
+        height=650,
     )
 
     return fig
@@ -448,7 +449,8 @@ def plot_gdpr_compliance(df_incidents):
 
     n = len(summary)
     colours = [GREY] * n
-    colours[0] = ACCENT
+    colours[n - 1] = ACCENT
+    colours[0] = BEST_COLOUR
 
     labels = [
         f"{row.compliance_pct:.0f}%  (n={row.total})"
@@ -892,6 +894,108 @@ def plot_sector_impact_bubble(df_incidents):
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         margin=dict(l=10, r=40, t=120, b=40),
         height=560,
+    )
+
+    return fig
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# GDPR Compliance — Dumbbell by Regulatory Decision
+# ─────────────────────────────────────────────────────────────────────────
+
+def plot_gdpr_dumbbell_by_decision(df_incidents):
+    """
+    Dumbbell chart: two dots per regulatory decision (compliant count, non-compliant
+    count) joined by a line. The segment length is the absolute gap, which the rate
+    view conceals — 'Informal Action Taken' at 62% on 2,289 incidents is a very
+    different story from 'Investigation Pursued' at 55% on 130 incidents.
+    """
+    if len(df_incidents) == 0:
+        fig = go.Figure()
+        fig.update_layout(title="No incidents match the current filters", height=350)
+        return fig
+
+    counts = (
+        df_incidents
+        .groupby(["decision", "gdpr_compliant"])
+        .size()
+        .reset_index(name="count")
+    )
+
+    pivot = (
+        counts
+        .pivot(index="decision", columns="gdpr_compliant", values="count")
+        .fillna(0)
+        .astype(int)
+        .rename(columns={False: "non_compliant", True: "compliant"})
+        .reset_index()
+    )
+    pivot["gap"] = pivot["compliant"] - pivot["non_compliant"]
+    pivot = pivot.sort_values("compliant", ascending=True).reset_index(drop=True)
+
+    fig = go.Figure()
+
+    # Connector lines drawn first so dots sit on top
+    for _, row in pivot.iterrows():
+        fig.add_shape(
+            type="line",
+            x0=row["non_compliant"], x1=row["compliant"],
+            y0=row["decision"],     y1=row["decision"],
+            line=dict(color=GREY, width=2.5),
+        )
+
+    fig.add_trace(go.Scatter(
+        x=pivot["non_compliant"],
+        y=pivot["decision"],
+        mode="markers",
+        name="Reported late (>72 h)",
+        marker=dict(color=NON_COMPLIANT, size=14, line=dict(color="white", width=1)),
+        customdata=pivot["gap"],
+        hovertemplate=(
+            "<b>%{y}</b><br>"
+            "Non-compliant: %{x:,}<br>"
+            "Gap (compliant − non-compliant): %{customdata:,}"
+            "<extra></extra>"
+        ),
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=pivot["compliant"],
+        y=pivot["decision"],
+        mode="markers",
+        name="Reported on time (≤72 h)",
+        marker=dict(color=COMPLIANT, size=14, line=dict(color="white", width=1)),
+        customdata=pivot["gap"],
+        hovertemplate=(
+            "<b>%{y}</b><br>"
+            "Compliant: %{x:,}<br>"
+            "Gap (compliant − non-compliant): %{customdata:,}"
+            "<extra></extra>"
+        ),
+    ))
+
+    largest = pivot.iloc[-1]
+
+    fig.update_layout(
+        title={
+            "text": (
+                "Compliance Gap by Regulatory Decision — Absolute Counts<br>"
+                f"<sub>'{largest['decision']}' drives the largest raw gap "
+                f"({largest['gap']:,} more compliant than non-compliant incidents); "
+                f"line length = absolute difference</sub>"
+            ),
+            "x": 0.0,
+            "xanchor": "left",
+        },
+        xaxis_title="Number of Incidents",
+        yaxis_title=None,
+        plot_bgcolor="white",
+        xaxis=dict(showgrid=True, gridcolor="#EEEEEE", zeroline=False),
+        yaxis=dict(showgrid=False),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        legend_title_text="",
+        margin=dict(l=10, r=40, t=110, b=40),
+        height=360,
     )
 
     return fig

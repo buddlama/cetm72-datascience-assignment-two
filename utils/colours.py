@@ -14,6 +14,10 @@ ACCENT       = CYBER
 WORST_COLOUR = CYBER
 BEST_COLOUR  = NON_CYBER
 
+# GDPR compliance semantic aliases (reuse the accessible pair, different meaning)
+COMPLIANT     = NON_CYBER  # blue  — reported within 72 h
+NON_COMPLIANT = CYBER      # orange — reported late
+
 # Category → colour mapping (passed directly to Plotly color_discrete_map)
 CATEGORY_COLOUR_MAP = {
     "Cyber":     CYBER,
