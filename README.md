@@ -40,6 +40,11 @@ cetm72-datascience-assignment-two/
 
 Requires Python 3.9+.
 
+> **Mac users:** create a virtual environment first to avoid conflicts with the system Python:
+> ```bash
+> python3 -m venv venv && source venv/bin/activate
+> ```
+
 ```bash
 pip install -r requirements.txt
 ```
