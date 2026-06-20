@@ -90,6 +90,65 @@ Time Taken to Report
 The dashboard automatically filters to Q1 2024 regardless of the date range
 in the source file, so a multi-year dataset can be used directly.
 
+## Deploying to Streamlit Cloud
+
+Anyone can host this dashboard publicly for free using their own GitHub account
+and [Streamlit Community Cloud](https://streamlit.io/cloud). No server or
+Docker knowledge required.
+
+### Prerequisites
+
+- A [GitHub](https://github.com) account
+- A [Streamlit Community Cloud](https://share.streamlit.io) account (free, sign
+  in with GitHub)
+
+### Steps
+
+1. **Fork or push this repository to your own GitHub account.**
+   The repo must be public (or you must be on a Streamlit Cloud plan that
+   supports private repos).
+
+2. **Make sure `ico-dataset.csv` is committed to the repository.**
+   Streamlit Cloud clones your repo at deploy time — if the data file is listed
+   in `.gitignore` or was never committed, the app will fail to start.
+   Verify it is tracked:
+   ```bash
+   git ls-files ico-dataset.csv
+   ```
+   If it prints nothing, add and commit it:
+   ```bash
+   git add ico-dataset.csv
+   git commit -m "add dataset"
+   git push
+   ```
+
+3. **Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.**
+
+4. **Click "Create app" and fill in:**
+
+   | Field | Value |
+   |---|---|
+   | Repository | `your-github-username/your-repo-name` |
+   | Branch | `main` (or whichever branch has your latest code) |
+   | Main file path | `app.py` |
+
+5. **Click "Deploy".**
+   Streamlit Cloud reads `requirements.txt` automatically and installs all
+   dependencies. The build takes 1–3 minutes.
+
+6. **Your app is live** at a URL like:
+   `https://your-username-your-repo-name-app-xxxxx.streamlit.app`
+
+### Notes
+
+- `requirements.txt` is already included in this repo — no changes needed.
+- The dataset file is 32 MB, which is well within GitHub's 100 MB per-file
+  limit. If you ever use a larger dataset, host it externally (e.g. Google
+  Sheets or a public URL) and update `DATA_PATH` in `utils/data.py`.
+- Any push to the deployed branch automatically triggers a re-deploy.
+
+---
+
 ## Further documentation
 
 - **`CHARTS_README.md`** — chart-by-chart documentation: what each chart
