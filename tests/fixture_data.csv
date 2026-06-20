@@ -1,0 +1,11 @@
+BI Reference,Year,Quarter,Data Subject Type,Data Type,Decision Taken,Incident Category,Incident Type,No. Data Subjects Affected,Sector,Time Taken to Report
+BI9001,2024,Qtr 1,Customers or prospective customers,Health data,Investigation Pursued,Non Cyber,Loss/theft of paperwork or data left in insecure location,10 to 99,Legal,Less than 24 hours
+BI9001,2024,Qtr 1,Customers or prospective customers,Location data,Investigation Pursued,Non Cyber,Loss/theft of paperwork or data left in insecure location,10 to 99,Legal,Less than 24 hours
+BI9001,2024,Qtr 1,Customers or prospective customers,Identification data,Investigation Pursued,Non Cyber,Loss/theft of paperwork or data left in insecure location,10 to 99,Legal,Less than 24 hours
+BI9002,2024,Qtr 1,Users,Identification data,No Further Action,Non Cyber,Data emailed to incorrect recipient,1 to 9,Health,24 hours to 72 hours
+BI9003,2024,Qtr 1,Employees,Economic and financial data,Action Taken,Cyber,Ransomware,100 to 1k,Health,72 hours to 1 week
+BI9004,2024,Qtr 1,Patients,Health data,Ongoing,Cyber,Phishing,1k to 10k,Health,More than 1 week
+BI9005,2024,Qtr 1,Members of the public,Basic personal identifiers,No Further Action,Non Cyber,Verbal disclosure of personal data,1 to 9,Legal,Less than 24 hours
+BI9006,2024,Qtr 1,Service users,Identification data,Investigation Pursued,Cyber,Unauthorised access,10k to 100k,Education and childcare,More than 1 week
+BI9007,2023,Qtr 4,Customers or prospective customers,Health data,No Further Action,Non Cyber,Failure to redact,10 to 99,Legal,Less than 24 hours
+BI9008,2024,Qtr 2,Customers or prospective customers,Health data,No Further Action,Non Cyber,Failure to redact,10 to 99,Legal,Less than 24 hours
