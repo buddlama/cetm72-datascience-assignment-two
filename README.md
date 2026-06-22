@@ -18,7 +18,7 @@ cetm72-datascience-assignment-two/
 ├── app.py                          Home page (entry point)
 ├── requirements.txt                Pinned Python dependencies
 ├── utils/
-│   ├── data.py                     load_data(), apply_filters(), shared constants
+│   ├── data.py                     load_data(), load_data_with_spinner(), apply_filters(), shared constants
 │   ├── charts.py                   All chart-building functions
 │   └── colours.py                  Central colour palette (WCAG-compliant constants)
 ├── pages/
