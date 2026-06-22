@@ -33,7 +33,6 @@ cetm72-datascience-assignment-two/
 │   ├── test_accessibility.py            Category 3: WCAG colour contrast tests
 │   └── requirements_traceability.md     Manual verification log
 ├── CHARTS_README.md                Chart-by-chart documentation (what, why, audience)
-└── PROJECT_SPECIFICATION.md        Assignment 1 scope vs. what was built
 ```
 
 ## Setup
