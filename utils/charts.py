@@ -268,7 +268,7 @@ def plot_breach_scale_by_category(df_incidents):
         plot_bgcolor="white",
         xaxis=dict(showgrid=False),
         yaxis=dict(
-            range=[0, counts["pct"].max()],
+            range=[0, min(counts["pct"].max() * 1.2, 100)],
             showgrid=True, gridcolor="#EEEEEE", zeroline=False,
         ),
         legend_title_text="",

@@ -1,8 +1,7 @@
 # UK Data Security Incidents Dashboard — Q1 2024
 
 A multi-page Streamlit dashboard built on ICO Data Security Incident Trends
-data, developed for CETM72 (Data Science) Assignment 2, University of
-Sunderland.
+data, developed for CETM25 (Data Vizualization) Assignment 2, University of Sunderland.
 
 ## What this is
 
@@ -35,6 +34,14 @@ cetm72-datascience-assignment-two/
 ├── CHARTS_README.md                Chart-by-chart documentation (what, why, audience)
 ```
 
+## Product DEMO
+
+**Live demo:** https://lama-cetm25-prototype.streamlit.app/
+
+> Similar URL would be shared with junior government officials
+> and data journalists to access the product directly in their browser —
+> no installation, no technical setup required.
+
 ## Setup
 
 Requires Python 3.9+.
@@ -44,6 +51,15 @@ Requires Python 3.9+.
 > ```bash
 > python3 -m venv venv && source venv/bin/activate
 > ```
+
+Ensure pip is installed and up to date before installing dependencies:
+
+```bash
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip
+```
+
+Then install dependencies:
 
 ```bash
 pip install -r requirements.txt
