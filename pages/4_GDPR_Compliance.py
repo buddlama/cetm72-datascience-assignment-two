@@ -3,16 +3,15 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from utils.data import load_data, apply_filters, render_summary_metrics, DATA_PATH
+from utils.data import load_data_with_spinner, apply_filters, render_summary_metrics
 from utils.charts import (
     plot_gdpr_compliance,
     plot_gdpr_compliance_by_category,
     plot_gdpr_dumbbell_by_decision,
 )
 
-st.set_page_config(page_title="GDPR Compliance — Q1 2024", layout="wide")
 
-df_incidents, df_rows = load_data(DATA_PATH)
+df_incidents, df_rows = load_data_with_spinner()
 
 st.title("GDPR Compliance")
 st.caption("Which sectors are reporting breaches within the legally required 72-hour window?")

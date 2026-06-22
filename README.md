@@ -40,6 +40,7 @@ cetm72-datascience-assignment-two/
 Requires Python 3.9+.
 
 > **Mac users:** create a virtual environment first to avoid conflicts with the system Python:
+>
 > ```bash
 > python3 -m venv venv && source venv/bin/activate
 > ```
@@ -74,11 +75,11 @@ whatever data file happens to be present locally.
 
 The test suite has three categories:
 
-| File | What it covers |
-|---|---|
-| `test_data_integrity.py` | Column presence, type correctness, value constraints |
-| `test_functional_requirements.py` | Filter logic, chart-data linkage, GDPR 72-hour rule, performance |
-| `test_accessibility.py` | WCAG 1.4.11 contrast ratios (≥ 3:1 on white) for every palette colour |
+| File                              | What it covers                                                        |
+| --------------------------------- | --------------------------------------------------------------------- |
+| `test_data_integrity.py`          | Column presence, type correctness, value constraints                  |
+| `test_functional_requirements.py` | Filter logic, chart-data linkage, GDPR 72-hour rule, performance      |
+| `test_accessibility.py`           | WCAG 1.4.11 contrast ratios (≥ 3:1 on white) for every palette colour |
 
 ## Data expectations
 
@@ -116,10 +117,13 @@ Docker knowledge required.
    Streamlit Cloud clones your repo at deploy time — if the data file is listed
    in `.gitignore` or was never committed, the app will fail to start.
    Verify it is tracked:
+
    ```bash
    git ls-files ico-dataset.csv
    ```
+
    If it prints nothing, add and commit it:
+
    ```bash
    git add ico-dataset.csv
    git commit -m "add dataset"
@@ -130,11 +134,11 @@ Docker knowledge required.
 
 4. **Click "Create app" and fill in:**
 
-   | Field | Value |
-   |---|---|
-   | Repository | `your-github-username/your-repo-name` |
-   | Branch | `main` (or whichever branch has your latest code) |
-   | Main file path | `app.py` |
+   | Field          | Value                                             |
+   | -------------- | ------------------------------------------------- |
+   | Repository     | `your-github-username/your-repo-name`             |
+   | Branch         | `main` (or whichever branch has your latest code) |
+   | Main file path | `app.py`                                          |
 
 5. **Click "Deploy".**
    Streamlit Cloud reads `requirements.txt` automatically and installs all

@@ -3,15 +3,14 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from utils.data import load_data, apply_filters, render_summary_metrics, DATA_PATH
+from utils.data import load_data_with_spinner, apply_filters, render_summary_metrics
 from utils.charts import (
     plot_incident_type_by_category,
     plot_breach_scale_by_category,
 )
 
-st.set_page_config(page_title="Incident Types — Q1 2024", layout="wide")
 
-df_incidents, df_rows = load_data(DATA_PATH)
+df_incidents, df_rows = load_data_with_spinner()
 
 st.title("Incident Types")
 st.caption("How did Q1 2024 breaches happen — human error or cyber-attack?")

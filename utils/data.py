@@ -89,6 +89,12 @@ def apply_filters(df_incidents, sectors=None, incident_types=None, categories=No
 
 DATA_PATH = "ico-dataset.csv"
 
+
+def load_data_with_spinner(filepath=DATA_PATH):
+    """Wraps load_data with a spinner on first load; cache makes it instant after."""
+    with st.spinner("Loading data…"):
+        return load_data(filepath)
+
 # subjects_affected is ordinal but doesn't sort correctly alphabetically,
 # so every chart that uses it must apply this explicit order.
 SUBJECTS_AFFECTED_ORDER = ["1 to 9", "10 to 99", "100 to 1k", "1k to 10k", "10k to 100k"]

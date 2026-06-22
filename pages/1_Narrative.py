@@ -3,11 +3,10 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from utils.data import load_data, DATA_PATH
+from utils.data import load_data_with_spinner
 
-st.set_page_config(page_title="Narrative — Q1 2024", layout="wide")
 
-df_incidents, df_rows = load_data(DATA_PATH)
+df_incidents, df_rows = load_data_with_spinner()
 
 total = len(df_incidents)
 non_cyber = (df_incidents["category"] == "Non Cyber").sum()
